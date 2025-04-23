@@ -12,7 +12,7 @@ Dooray API를 활용한 일정 관리 MCP 서버입니다.
 
 1. 저장소 클론
 ```bash
-git clone https://github.com/yourusername/dooray-mcp.git
+git clone https://github.com/mskim8717/dooray-mcp.git
 cd dooray-mcp
 ```
 
@@ -43,7 +43,18 @@ DOORAY_CALENDAR_ID=your_calendar_id
 
 서버 실행:
 ```bash
-python dooray-mcp-server.py
+python src/dooray-mcp-server.py
+```
+
+## 프로젝트 구조
+
+```
+dooray-mcp/
+├── src/
+│   └── dooray-mcp-server.py
+├── pyproject.toml
+├── README.md
+└── LICENSE
 ```
 
 ## 라이선스
