@@ -29,7 +29,28 @@ source .venv/bin/activate  # Linux/Mac
 pip install -e .
 ```
 
-## 환경 변수 설정
+## MCP 클라이언트 연동을 위한 준비
+
+Claude, Cursor와 같은 MCP 클라이언트 애플리케이션에서 로컬 MCP 서버를 연동하려면,
+서버 실행에 필요한 Python 실행 파일 경로와 MCP 서버 스크립트 경로를 JSON 설정에 입력해야 합니다.
+
+내 경로에 알맞게 mcp.json을 수정해둡니다.
+
+✅ macOS / Linux 예시
+```json
+{
+  "mcpServers": {
+    "dooray-mcp": {
+      "command": "/Users/yourname/project/.venv/bin/python",
+      "args": [
+        "/Users/yourname/project/src/dooray-mcp-server.py"
+      ]
+    }
+  }
+}
+```
+
+## 환경변수 설정
 
 `.env` 파일을 생성하고 다음 변수들을 설정하세요:
 
