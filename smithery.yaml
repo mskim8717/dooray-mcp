@@ -1,0 +1,29 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - doorayApiKey
+      - doorayMemberId
+      - doorayCalendarId
+    properties:
+      doorayApiKey:
+        type: string
+        description: Dooray API key
+      doorayMemberId:
+        type: string
+        description: Dooray member ID
+      doorayCalendarId:
+        type: string
+        description: Dooray calendar ID
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({command: 'python', args: ['src/dooray-mcp-server.py'], env: {DOORAY_API_KEY: config.doorayApiKey, DOORAY_MEMBER_ID: config.doorayMemberId, DOORAY_CALENDAR_ID: config.doorayCalendarId}})
+  exampleConfig:
+    doorayApiKey: your_api_key
+    doorayMemberId: your_member_id
+    doorayCalendarId: your_calendar_id
