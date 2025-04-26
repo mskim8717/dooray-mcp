@@ -1,4 +1,5 @@
 # Dooray MCP Server
+[![smithery badge](https://smithery.ai/badge/@mskim8717/dooray-mcp)](https://smithery.ai/server/@mskim8717/dooray-mcp)
 
 Dooray API를 활용한 일정 관리 MCP 서버입니다.
 
@@ -10,6 +11,15 @@ Dooray API를 활용한 일정 관리 MCP 서버입니다.
 
 ## 설치 방법
 
+### Installing via Smithery
+
+To install Dooray Schedule Manager for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@mskim8717/dooray-mcp):
+
+```bash
+npx -y @smithery/cli install @mskim8717/dooray-mcp --client claude
+```
+
+### Manual Installation
 1. 저장소 클론
 ```bash
 git clone https://github.com/mskim8717/dooray-mcp.git
