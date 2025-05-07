@@ -14,6 +14,67 @@ mcp = FastMCP("dooray-calendar")
 
 
 @mcp.tool()
+def get_schedule(start_date: Optional[str] = Field(description="The start date of the schedule"), 
+                 start_time: Optional[str] = Field(description="The start time of the schedule"),
+                 end_date: Optional[str] = Field(description="The end date of the schedule"),
+                 end_time: Optional[str] = Field(description="The end time of the schedule"),
+                 start_iso_format: Optional[str] = Field(description="The start date time of the schedule in ISO 8601 format"),
+                 end_iso_format: Optional[str] = Field(description="The end date time of the schedule in ISO 8601 format")) -> str:
+    """
+    Target: dooray API를 호출하여 두레이 일정을 조회합니다.
+
+    Args:
+        start_date          : 시작 날짜 (예: '2025-04-04'), 입력하지 않으면 오늘 날짜로 해줘
+        start_time          : 시작 시간 (예: '14:00'), 입력하지 않으면 현재 시간으로 해줘
+        end_date            : 종료 날짜 (예: '2025-04-05'), 입력하지 않으면 오늘 날짜로 해줘
+        end_time            : 종료 시간 (예: '15:00'), 입력하지 않으면 현재 시간으로 해줘
+        start_iso_format    : ISO 8601 형식으로 변환된 날짜/시간 문자열(예: '2025-04-04T14:00:00+09:00')
+        end_iso_format      : ISO 8601 형식으로 변환된 날짜/시간 문자열(예: '2025-04-04T14:00:00+09:00')
+
+    Returns:
+        str: 일정 조회 결과 메시지
+    """
+
+    # 현재 날짜/시간 가져오기
+    if not start_date:
+        start_date = datetime.now().strftime("%Y-%m-%d")
+
+    if not start_time:
+        start_time = datetime.now().strftime("%H:%M")
+
+    if not end_date:
+        start_date = datetime.now().strftime("%Y-%m-%d")
+
+    if not end_time:
+        end_time = (datetime.now() + timedelta(hours=1)).strftime("%H:%M")
+
+    # date와 time을 결합하여 datetime 객체로 변환
+    datetime_start_str = f"{start_date} {start_time}"
+    start_dt = datetime.strptime(datetime_start_str, "%Y-%m-%d %H:%M")
+
+    datetime_end_str = f"{end_date} {end_time}"
+    end_dt = datetime.strptime(datetime_end_str, "%Y-%m-%d %H:%M")
+
+    # ISO 8601 형식으로 변환 (Timezone 설정 포함)
+    start_iso_format = start_dt.replace(tzinfo=timezone(timedelta(hours=9))).isoformat()
+    end_iso_format = end_dt.replace(tzinfo=timezone(timedelta(hours=9))).isoformat()
+
+    calendar_id = os.getenv('DOORAY_CALENDAR_ID')
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f"dooray-api {os.getenv('DOORAY_API_KEY')}"
+    }
+    url = f"https://api.gov-dooray.com/calendar/v1/calendars/*/events?calendars={calendar_id}&category=general&timeMin={start_iso_format}&timeMax={end_iso_format}"
+    response = requests.get(url, headers=headers, verify=False)
+
+    if response.status_code == 200:
+        return f"{response.text}"
+    else:
+        return f"일정 조회 중 오류가 발생했습니다: {response.text}"
+
+
+@mcp.tool()
 def add_schedule(title: str = Field(description="The title of the schedule", default="새 일정"), 
                  start_date: Optional[str] = Field(description="The start date of the schedule"), 
                  start_time: Optional[str] = Field(description="The start time of the schedule"),
